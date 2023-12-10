@@ -121,6 +121,16 @@ uint64 sumE(uint64 e)
     return ROTR(e,14)^ROTR(e,18)^ROTR(e,41);
 }
 
+uint64 sigma0(uint64 w)
+{
+    return ROTR(w,19)^ROTR(w,61)^(w<<6);
+}
+
+uint64 sigma1(uint64 w)
+{
+    return ROTR(w,1)^ROTR(w,8)^(w<<7);
+}
+
 void messageSchedule(string m)
 {
     int track=0;
@@ -133,9 +143,11 @@ void messageSchedule(string m)
     uint64 w1,w2,w3,w4;
     for(int i=16;i<80;i++)
     {
-        w1= ROTR(Word[i-2],19)^ROTR(Word[i-2],61)^(Word[i-2]<<6);
+        //w1= ROTR(Word[i-2],19)^ROTR(Word[i-2],61)^(Word[i-2]<<6);   // sigma function1
+        w1= sigma0(Word[i-2]);
         w2= Word[i-7];
-        w3= ROTR(Word[i-15],1)^ROTR(Word[i-15],8)^(Word[i-15]<<7);
+        //w3= ROTR(Word[i-15],1)^ROTR(Word[i-15],8)^(Word[i-15]<<7);   // s f 0
+        w3= sigma1(Word[i-15]);
         w4= Word[i-16];
 
         Word[i]=w1+w2+w3+w4;
